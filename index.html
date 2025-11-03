@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For My Princess — Anika</title>
+  <style>
+    /* ---- Base / Theme ---- */
+    :root{
+      --bg:#07060a;
+      --deep:#0f0b1a;
+      --violet:#7b3cff;
+      --rose:#ff9fb1;
+      --gold:#eab676;
+      --glass: rgba(255,255,255,0.04);
+      --accent: linear-gradient(135deg,var(--violet),var(--rose));
+      --blur: 8px;
+      --font-sans: 'Segoe UI', Roboto, system-ui, -apple-system, 'Noto Sans';
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;font-family:var(--font-sans);background:radial-gradient(ellipse at 10% 0%, rgba(123,60,255,0.06) 0%, transparent 30%), radial-gradient(ellipse at 90% 100%, rgba(255,159,177,0.03) 0%, transparent 30%), var(--bg);color:#eae6ee;overflow:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+
+    /* ---- Starfield ---- */
+    .stars{
+      position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.7;background-image: radial-gradient(circle at 2% 20%, rgba(255,255,255,0.08) 0px, transparent 2px), radial-gradient(circle at 40% 30%, rgba(255,255,255,0.06) 0px, transparent 2px), radial-gradient(circle at 80% 60%, rgba(255,255,255,0.05) 0px, transparent 2px), radial-gradient(circle at 60% 80%, rgba(255,255,255,0.04) 0px, transparent 2px);
+      background-size: 3px 3px, 4px 4px, 2px 2px, 3px 3px;filter:blur(0.6px);
+      animation: drift 30s linear infinite;
+    }
+    @keyframes drift{from{transform:translateY(0)}to{transform:translateY(-40px)}}
+
+    /* ---- Layout ---- */
+    .stage{position:relative;z-index:2;display:grid;place-items:center;height:100vh;padding:28px;}
+    .card{width:min(920px,95vw);max-width:1100px;padding:28px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(0,0,0,0.6);backdrop-filter: blur(6px);border:1px solid rgba(255,255,255,0.03)}
+
+    h1.title{font-size:28px;margin:8px 0 12px;letter-spacing:0.6px;color:#fff;text-align:center}
+    .subtitle{color:rgba(234,230,238,0.7);text-align:center;margin-bottom:18px}
+
+    /* ---- Login ---- */
+    .login{display:flex;flex-direction:column;gap:12px;align-items:center}
+    .moon{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.06), rgba(255,255,255,0.02) 30%, rgba(123,60,255,0.03));box-shadow:0 6px 30px rgba(123,60,255,0.06) inset, 0 6px 40px rgba(0,0,0,0.6);display:grid;place-items:center}
+    .moon .emoji{font-size:46px;filter:drop-shadow(0 4px 8px rgba(123,60,255,0.12))}
+
+    .input{width:340px;max-width:90%;padding:12px 14px;border-radius:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.03);color:inherit}
+    .btn{padding:10px 18px;border-radius:12px;background:var(--accent);border:none;color:#081;cursor:pointer;font-weight:600;box-shadow:0 6px 20px rgba(123,60,255,0.12);}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:rgba(234,230,238,0.9)}
+
+    .small{font-size:13px;color:rgba(234,230,238,0.65)}
+
+    /* ---- Forgiveness Ad ---- */
+    .ad-card{display:grid;place-items:center;gap:12px;padding:30px;border-radius:14px;background:linear-gradient(135deg, rgba(123,60,255,0.14), rgba(255,159,177,0.06));border:1px solid rgba(255,255,255,0.04)}
+    .price{font-size:18px;font-weight:700;color:var(--gold)}
+
+    /* ---- Menu Grid ---- */
+    .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
+    .card-btn{padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;align-items:flex-start;gap:8px;cursor:pointer;transition:transform .25s ease, box-shadow .25s ease}
+    .card-btn:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.4)}
+    .card-btn .icon{font-size:22px}
+    .card-btn .label{font-weight:700}
+    .card-btn .desc{font-size:13px;color:rgba(234,230,238,0.6)}
+
+    /* ---- Page containers ---- */
+    .page{display:none;animation:fadeIn .6s ease both}
+    .page.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+    .back{margin-top:18px;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;cursor:pointer}
+
+    /* ---- Memories gallery ---- */
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .mem-img{height:140px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;padding:8px}
+    .caption{font-size:13px;color:rgba(234,230,238,0.7);margin-top:8px}
+
+    /* ---- Oath / letters style ---- */
+    .text-scroll{background:linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.05));padding:22px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);line-height:1.6}
+
+    .envelope{padding:18px;border-radius:12px;background:linear-gradient(135deg, rgba(123,60,255,0.06), rgba(255,159,177,0.03));cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
+
+    /* ---- Typewriter ---- */
+    .typewriter{font-family:var(--font-sans);white-space:pre-wrap;min-height:70px}
+
+    /* ---- Footer small ---- */
+    footer{display:flex;justify-content:center;color:rgba(234,230,238,0.45);font-size:13px;margin-top:12px}
+
+    /* Responsive */
+    @media (max-width:720px){.menu-grid{grid-template-columns:repeat(2,1fr)}.card{padding:18px}}
+
+    #memories-container {
+  max-height: 80vh;   /* 80% of viewport height */
+  overflow-y: auto;   /* vertical scroll if too many images */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 20px;
+}
+.memory-item {
+  cursor: pointer;
+  width: 200px;       /* adjust size if needed */
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  transition: transform 0.2s;
+}
+.memory-item:hover {
+  transform: scale(1.05);
+}
+
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="stage">
+    <div class="card" id="app">
+
+      <!-- LOGIN VIEW -->
+      <div id="view-login" class="page active">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <h1 class="title">For My Princess — <span style="color:var(--rose)">Anika</span></h1>
+            <div class="subtitle">Only the one who holds my heart may enter.</div>
+          </div>
+          <div style="text-align:right;font-size:13px;color:rgba(234,230,238,0.6)">Built with care • dark cinematic</div>
+        </div>
+
+        <div class="login" style="margin-top:18px;">
+          <div class="moon"><div class="emoji">🌙</div></div>
+          <input id="username" class="input" placeholder="Username" autocomplete="off" />
+          <input id="password" class="input" placeholder="Password" type="password" autocomplete="off" />
+          <button class="btn" id="loginBtn">Enter</button>
+          <div class="small">Hint: username and password are both given. Type them to continue.</div>
+        </div>
+      </div>
+
+      <!-- AD VIEW -->
+      <div id="view-ad" class="page">
+        <h2 style="text-align:center">Forgiveness Store™</h2>
+        <div class="ad-card">
+          <div class="price">One Forgiveness = ~$100,000~</div>
+          <div style="font-weight:700;font-size:16px">Today’s Offer: FREE — only for the one who owns my heart</div>
+          <div class="small">Click redeem — and see what gentle truth feels like.</div>
+          <button class="btn" id="redeemBtn">Redeem Forgiveness</button>
+        </div>
+        <div style="margin-top:14px;text-align:center" class="small">(Clicking will lead to the heart of this place.)</div>
+      </div>
+
+      <!-- HOME / MENU VIEW -->
+      <div id="view-home" class="page">
+        <h1 class="title">Welcome home, <span style="color:var(--rose)">Princess</span></h1>
+        <div class="subtitle">Every button leads to a part of my heart.</div>
+
+        <div class="menu-grid">
+          <div class="card-btn" data-target="memories">
+            <div class="icon">💫</div>
+            <div class="label">Memories</div>
+            <div class="desc">Our video-call moments — click to relive them.</div>
+          </div>
+
+          <div class="card-btn" data-target="oath">
+            <div class="icon">💍</div>
+            <div class="label">The Oath</div>
+            <div class="desc">My promise to you, cinematic and true.</div>
+          </div>
+
+          <div class="card-btn" data-target="letters">
+            <div class="icon">🕊️</div>
+            <div class="label">Letters I Never Sent</div>
+            <div class="desc">Short letters — things I should have said, now written.</div>
+          </div>
+
+          <div class="card-btn" data-target="upset">
+            <div class="icon">🌙</div>
+            <div class="label">When You’re Upset</div>
+            <div class="desc">If you come here angry: breathe. Read this.</div>
+          </div>
+
+          <div class="card-btn" data-target="future">
+            <div class="icon">💖</div>
+            <div class="label">Our Future</div>
+            <div class="desc">A short vision of us, dawn after the night.</div>
+          </div>
+
+          <div class="card-btn" data-target="secret">
+            <div class="icon">🔮</div>
+            <div class="label">The Secret Door</div>
+            <div class="desc">A small hidden message — just for you.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:center;margin-top:16px;gap:10px;align-items:center">
+          <button id="musicToggle" class="btn secondary">Play Music</button>
+          <button id="logout" class="btn secondary">Logout</button>
+        </div>
+
+      </div>
+
+      <!-- MEMORIES PAGE -->
+      <div id="view-memories" class="page">
+        <h2 class="title">Memories</h2>
+        <div id="memories-container"></div>
+        <div class="subtitle">Small pixel hugs that keep me warm.</div>
+        <div class="gallery" id="gallery">
+          <!-- images will be injected here by JS. Add your screenshots to the 'memories' array in the script. -->
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <div class="small">Tip: add your SS filenames in the script to show them here (see comments).</div>
+          <button class="back" data-target="home">Back to Home</button>
+        </div>
+      </div>
+
+      <!-- OATH PAGE -->
+      <div id="view-oath" class="page">
+        <h2 class="title">The Oath</h2>
+        <div class="text-scroll">
+          <div id="oathText" class="typewriter"></div>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:12px"><button class="back" data-target="home">Back to Home</button></div>
+      </div>
+
+      <!-- LETTERS PAGE -->
+      <div id="view-letters" class="page">
+        <h2 class="title">Letters I Never Sent</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px">
+          <div class="envelope" data-letter="letter1">
+            <div style="font-weight:700">The Night I Let Silence Win</div>
+            <div class="small">Click to open</div>
+          </div>
+          <div class="envelope" data-letter="letter2">
+            <div style="font-weight:700">The Day I Realized You’re My Calm</div>
+            <div class="small">Click to open</div>
+          </div>
+          <div class="envelope" data-letter="letter3">
+            <div style="font-weight:700">Words I Wanted to Say That Night</div>
+            <div class="small">Click to open</div>
+          </div>
+        </div>
+
+        <div id="letterOpen" style="margin-top:16px;display:none" class="text-scroll"></div>
+        <div style="display:flex;justify-content:center;margin-top:12px"><button class="back" data-target="home">Back to Home</button></div>
+      </div>
+
+      <!-- UPSET PAGE -->
+      <div id="view-upset" class="page">
+        <h2 class="title">When You’re Upset</h2>
+        <div class="text-scroll">
+          <div id="upsetText" class="typewriter"></div>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:12px"><button class="back" data-target="home">Back to Home</button></div>
+      </div>
+
+      <!-- FUTURE PAGE -->
+      <div id="view-future" class="page">
+        <h2 class="title">Our Future</h2>
+        <div class="text-scroll">
+          <div id="futureText" class="typewriter"></div>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:12px"><button class="back" data-target="home">Back to Home</button></div>
+      </div>
+
+      <!-- SECRET PAGE -->
+      <div id="view-secret" class="page">
+        <h2 class="title">The Secret Door</h2>
+        <div class="text-scroll">
+          <div style="font-weight:700;font-size:16px;margin-bottom:8px">You found it, Princess.</div>
+          <div>I always knew you'd be the one to look closer. That's why I hid it for you.</div>
+          <div style="margin-top:8px;font-style:italic">You found me. You always do. I won't stop trying, because you make me try.</div>
+          <div style="margin-top:14px;font-weight:700;color:var(--rose);font-size:18px">I love you, Princess — Anika.</div>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:12px"><button class="back" data-target="home">Back to Home</button></div>
+      </div>
+
+      <footer>Made with care • For Anika (Princess)</footer>
+
+    </div>
+  </div>
+
+  <!-- Background audio (optional) - add music.mp3 to the same folder to enable auto-play in some browsers -->
+  <audio id="love-romantic-music-412707" loop src="c:\Users\HP\Downloads\love-romantic-music-412707.mp3"></audio>
+
+  <script>
+    /* ====== Configuration ======
+       - To add memories: put image files in the same folder and list their filenames below in the 'memories' array.
+       - Example: const memories = ['call1.jpg','call2.png']
+    */
+    const CONFIG = {
+    
+      username: 'princess',
+      password: 'eternal',
+      memories: [
+        // Add filenames here when you're ready, e.g. 'vc1.jpg', 'vc2.png'
+        'WhatsApp Image 2025-11-02 at 00.18.48_25da38d3.jpg', 'WhatsApp Image 2025-11-02 at 00.18.48_f6cb9d27.jpg' ,'WhatsApp Image 2025-11-02 at 00.18.49_25b33370.jpg', 'WhatsApp Image 2025-11-02 at 00.18.49_33d0a14a.jpg', 'WhatsApp Image 2025-11-02 at 00.18.49_aa117c9c.jpg', 'WhatsApp Image 2025-11-02 at 00.18.50_95c3057c.jpg' ,'WhatsApp Image 2025-11-02 at 00.18.50_542aa72c.jpg', 'WhatsApp Image 2025-11-02 at 00.18.51_d734b87f.jpg', 'WhatsApp Image 2025-11-02 at 00.18.51_ecc034ac.jpg' ,'WhatsApp Image 2025-11-02 at 00.18.51_ecf18613.jpg' ,'WhatsApp Image 2025-11-02 at 00.19.34_2608534c.jpg', 'WhatsApp Image 2025-11-02 at 00.23.16_a5ed7db9.jpg' ,'WhatsApp Image 2025-11-02 at 00.23.16_e34c14e6.jpg' ,'WhatsApp Image 2025-11-02 at 02.25.12_c7b60e96.jpg'
+      ],
+      texts: {
+        oath: `I, your fool and your fighter,\n\nswear not to run when things get hard.\nTo listen before reacting,\nto speak with care,\nto learn when I am wrong.\n\nI will protect what we build — even from my own mistakes.\n\nThis is my promise, sealed in code, written in heart.\n\n— Always, yours.`,
+        upset: `If you are reading this and your heart is heavy, breathe with me.\n\nI didn't choose my words the way I should have. I know I hurt you — and I am sorry.\n\nI won't ask you to forgive me now. I only ask: give me the chance to be better.\n\nTake your time. I'll be here.`,
+        future: `One day this distance will fold into one morning: coffee, lazy smiles, and your hand in mine.\n\nUntil then I will keep building small worlds like this — little promises to remind you:\nYou are my plan, my patient love, my forever.\n\n— For you, Princess.`
+      }
+    };// This will load all images in the memories section
+const memoriesContainer = document.getElementById('memories-container');
+
+CONFIG.memories.forEach((img) => {
+  const image = document.createElement('img');  // create image element
+  image.src = img;                              // set the source to the filename
+  image.classList.add('memory-item');           // add styling class
+  image.onclick = () => {
+    window.open(img, '_blank');                // open full size on click
+  };
+  memoriesContainer.appendChild(image);         // add image to the container
+});
+
+
+    /* ====== Simple view router ====== */
+    const views = [...document.querySelectorAll('.page')];
+    const show = (id)=>{
+      views.forEach(v=>v.classList.remove('active'));
+      const el = document.getElementById('view-'+id);
+      if(el){el.classList.add('active'); window.location.hash = id;}
+    }
+
+    // On load, always start at login
+    function initFromHash(){
+      const h = location.hash.replace('#','');
+      if(!h || h==='login') { show('login'); return; }
+      // protect views behind login
+      const allowed = ['login','ad','home'];
+      // if user is not logged in, always go to login
+      if(!sessionStorage.getItem('loggedIn')){ show('login'); return; }
+      // otherwise show requested view or home
+      const valid = ['ad','home','memories','oath','letters','upset','future','secret'];
+      show(valid.includes(h)?h:'home');
+    }
+    window.addEventListener('hashchange', initFromHash);
+
+    /* ====== Login logic ====== */
+    document.getElementById('loginBtn').addEventListener('click', ()=>{tryLogin()});
+    document.getElementById('password').addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryLogin(); });
+    function tryLogin(){
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      if(u === CONFIG.username && p === CONFIG.password){
+        sessionStorage.setItem('loggedIn','1');
+        // warm welcome
+        show('ad');
+      } else {
+        shakeLogin();
+        alert('Wrong credentials. Try: username and password are provided (case-sensitive).');
+      }
+    }
+    function shakeLogin(){ const card=document.querySelector('#view-login .login'); card.animate([{transform:'translateX(0)'},{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'translateX(0)'}],{duration:450}); }
+
+    /* ====== Redeem button ====== */
+    document.getElementById('redeemBtn').addEventListener('click', ()=>{ show('home'); startMusic(); });
+
+    /* ====== Menu button handlers ====== */
+    document.querySelectorAll('.card-btn').forEach(b=>b.addEventListener('click',(e)=>{
+      const t = b.dataset.target;
+      if(t==='memories') { populateGallery(); }
+      if(t==='oath'){ typeText('oathText', CONFIG.texts.oath); }
+      if(t==='upset'){ typeText('upsetText', CONFIG.texts.upset); }
+      if(t==='future'){ typeText('futureText', CONFIG.texts.future); }
+      show(t);
+    }));
+
+    // back buttons
+    document.querySelectorAll('.back').forEach(b=>b.addEventListener('click',()=>show('home')));
+
+    // logout
+    document.getElementById('logout').addEventListener('click', ()=>{ sessionStorage.removeItem('loggedIn'); show('login'); document.getElementById('username').value=''; document.getElementById('password').value=''; stopMusic();});
+
+    /* ====== Gallery writer ====== */
+    function populateGallery(){
+      const g = document.getElementById('gallery'); g.innerHTML='';
+      if(CONFIG.memories.length===0){
+        g.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:rgba(234,230,238,0.6)">No images yet — add your video call screenshots by editing the script. Example: const memories = ['vc1.jpg','vc2.png']</div>`;
+        return;
+      }
+      CONFIG.memories.forEach((m,idx)=>{
+        const box = document.createElement('div'); box.className='mem-img';
+        const img = document.createElement('img'); img.src = m; img.alt = `Memory ${idx+1}`; img.style.width='100%'; img.style.height='100%'; img.style.borderRadius='8px';
+        box.appendChild(img);
+        const cap = document.createElement('div'); cap.className='caption'; cap.textContent = `That call — memory ${idx+1}`;
+        const wrap = document.createElement('div'); wrap.appendChild(box); wrap.appendChild(cap);
+        g.appendChild(wrap);
+      })
+    }
+
+    /* ====== Typing effect ====== */
+    let typerTimer = null;
+    function typeText(elId, text){
+      clearInterval(typerTimer);
+      const el = document.getElementById(elId);
+      el.textContent='';
+      let i=0;
+      typerTimer = setInterval(()=>{
+        el.textContent += text.charAt(i);
+        i++;
+        if(i>text.length-1) clearInterval(typerTimer);
+      },24);
+    }
+
+    /* ====== Letters open ====== */
+    const letters = {
+      letter1: `I kept quiet that night because I did not know how to say sorry in a way you'd feel.\n\nI thought honesty alone was enough. I was wrong.\n\nYou deserve softness, Princess. I will learn to be softer.`,
+      letter2: `There is a calm inside you that catches everything I throw.\n\nWhen I realized that, I knew I had to keep you close.\n\nThank you for being patient with me.`,
+      letter3: `Those words I wanted to say: I'm sorry for making you doubt.\n\nI'm learning. I will listen. I will protect what we have — gently.`
+    }
+    document.querySelectorAll('.envelope').forEach(env=>env.addEventListener('click',()=>{
+      const key = env.dataset.letter; const box = document.getElementById('letterOpen'); box.style.display='block'; box.textContent='';
+      typeBlockText(box, letters[key]);
+    }));
+    function typeBlockText(el, text){ el.textContent=''; let i=0; const t = setInterval(()=>{ el.textContent += text.charAt(i); i++; if(i>text.length-1) clearInterval(t); },18) }
+
+    /* ====== Music controls ====== */
+    const music = document.getElementById('bgMusic');
+    const mbtn = document.getElementById('musicToggle');
+    let musicPlaying=false;
+    function startMusic(){
+      // attempt autoplay; may be blocked. But we set playing flag so toggle works.
+      music.play().then(()=>{ musicPlaying=true; mbtn.textContent='Pause Music'; }).catch(()=>{ musicPlaying=false; mbtn.textContent='Play Music'; });
+    }
+    function stopMusic(){ music.pause(); music.currentTime=0; musicPlaying=false; mbtn.textContent='Play Music'; }
+    mbtn.addEventListener('click', ()=>{ if(!musicPlaying){ music.play().then(()=>{ musicPlaying=true; mbtn.textContent='Pause Music'; }).catch(()=>{ alert('Autoplay blocked — click Play on device.'); }); } else{ music.pause(); musicPlaying=false; mbtn.textContent='Play Music'; } });
+
+    /* ====== Init content ====== */
+    window.addEventListener('load', ()=>{
+      initFromHash();
+      // pre-type some content if user lands directly on oath/upset/future while logged in
+      if(sessionStorage.getItem('loggedIn')){
+        if(location.hash.replace('#','')==='oath') typeText('oathText', CONFIG.texts.oath);
+      }
+
+      // small hidden sparkle to find secret door (clicking anywhere tiny area)
+      const stage = document.querySelector('.card');
+      stage.addEventListener('dblclick',(e)=>{ // double-click near top-right opens secret (just a little easter egg)
+        show('secret');
+      });
+
+    });
+
+  </script>
+</body>
+</html>
